@@ -8,5 +8,5 @@ def hello():
     return "Hello from environment!"
 
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 8080))  # если порт не передали, то стандарт - 8080
+    port = int(os.environ.get("PORT", 8080)) 
     app.run(host="0.0.0.0", port=port)
