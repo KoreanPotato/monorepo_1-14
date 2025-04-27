@@ -1,0 +1,24 @@
+---
+- name: Deploy web-ui service
+  hosts: web_servers
+  become: true  # Получение sudo прав
+  tasks:
+    - name: Copy systemd service file
+      copy:
+        src: ../systemd/web-ui.service
+        dest: /etc/systemd/system/web-ui.service
+        mode: '0644'
+      
+    - name: Reload systemd daemon
+      systemd:
+        daemon_reload: yes
+      
+    - name: Enable web-ui service
+      systemd:
+        name: web-ui
+        enabled: yes
+        
+    - name: Start web-ui service
+      systemd:
+        name: web-ui
+        state: started
