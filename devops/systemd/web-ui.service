@@ -1,14 +1,14 @@
 [Unit]
-Description=Web UI Flask Application
+Description=Hello World Web App
 After=network.target
 
 [Service]
 User=sergey
-WorkingDirectory=/home/sergey/apps
-ExecStart=/usr/bin/python3 /home/sergey/apps/app.py
-Restart=on-failure
+WorkingDirectory=/home/sergey/apps/
+ExecStart=/home/sergey/apps/venv/bin/python /home/sergey/apps/app.py
+Restart=always
+# Добавьте задержку между перезапусками
 RestartSec=5
-Environment=PYTHONUNBUFFERED=1
 
 [Install]
 WantedBy=multi-user.target

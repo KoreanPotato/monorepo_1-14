@@ -1,0 +1,15 @@
+[Unit]
+Description=Hello World App (Docker Container)
+After=docker.service
+Requires=docker.service
+
+[Service]
+Restart=always
+ExecStartPre=-/usr/bin/docker stop hello-container
+ExecStartPre=-/usr/bin/docker rm hello-container
+ExecStart=/usr/bin/docker run --name hello-container -p 5000:5000 hello-app
+ExecStop=/usr/bin/docker stop hello-container
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
