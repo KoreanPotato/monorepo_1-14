@@ -7,8 +7,10 @@ User=sergey
 WorkingDirectory=/home/sergey/apps/
 ExecStart=/home/sergey/apps/venv/bin/python /home/sergey/apps/app.py
 Restart=always
-# Добавьте задержку между перезапусками
 RestartSec=5
 
 [Install]
 WantedBy=multi-user.target
+
+
+#Task 5

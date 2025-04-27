@@ -1,7 +1,7 @@
 ---
 - name: Deploy web-ui service
   hosts: web_servers
-  become: true  # Получение sudo прав
+  become: true  
   tasks:
     - name: Copy systemd service file
       copy:
@@ -22,3 +22,5 @@
       systemd:
         name: web-ui
         state: started
+
+#Task 8
