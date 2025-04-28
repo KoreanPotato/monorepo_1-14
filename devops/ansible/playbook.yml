@@ -1,7 +1,15 @@
 ---
 - name: Deploy web-ui service with Docker
   hosts: web_servers
-  become: true  
+  become: true
+  gather_facts: yes
+  vars:
+    ansible_ssh_pipelining: true
+  pre_tasks:
+    - name: Wait for SSH connection
+      wait_for_connection:
+        delay: 5
+        timeout: 60
   tasks:
     - name: Install Docker dependencies
       apt:
@@ -50,5 +58,11 @@
         docker run -d --name web-app -p 8080:8080 -e PORT=8080 web-ui:latest
       args:
         executable: /bin/bash
+      register: docker_result
+      ignore_errors: true
+      
+    - name: Show Docker build result
+      debug:
+        var: docker_result
 
 #Task 8
