@@ -48,3 +48,5 @@ ssh $SSH_USER@$SSH_HOST -p $SSH_PORT -i $SSH_KEY << 'EOF'
 EOF
 
 echo "Скрипт выполнен."
+
+#task 9
