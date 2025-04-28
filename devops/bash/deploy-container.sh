@@ -1,20 +1,20 @@
 #!/bin/bash
 
 # Переменные для SSH-подключения
-SSH_HOST=""        # IP-адрес или имя хоста
-SSH_USER=""        # Имя пользователя для SSH
-SSH_PORT="22"      # SSH порт (обычно 22)
-SSH_KEY=""         # Путь к приватному ключу (если используется)
+SSH_HOST="100.114.136.8"  # IP-адрес или имя хоста
+SSH_USER="sergey"         # Имя пользователя для SSH
+SSH_PORT="22"             # SSH порт (обычно 22)
+SSH_KEY="~/.ssh/id_rsa"   # Путь к приватному ключу (если используется)
 
 # Переменные для Docker-контейнера
-CONTAINER_NAME=""  # Имя контейнера
-IMAGE_NAME=""      # Имя образа
-PORT_MAPPING=""    # Маппинг портов, например "8080:8080"
-ENV_VARS=""        # Переменные окружения, например "-e PORT=8080"
+CONTAINER_NAME="web-app"     # Имя контейнера
+IMAGE_NAME="web-ui:latest"   # Имя образа
+PORT_MAPPING="8080:8080"     # Маппинг портов, например "8080:8080"
+ENV_VARS="-e PORT=8080"      # Переменные окружения, например "-e PORT=8080"
 
 # Путь к Dockerfile и приложению на удаленной машине
-DOCKERFILE_PATH="/path/to/web-ui.Dockerfile"
-APP_PATH="/path/to/web-ui/src"
+DOCKERFILE_PATH="/home/sergey/devops/web-ui.Dockerfile"
+APP_PATH="/home/sergey/web-ui/src"
 
 # Подключаемся к удаленной машине и выполняем команды
 echo "Подключение к $SSH_HOST..."

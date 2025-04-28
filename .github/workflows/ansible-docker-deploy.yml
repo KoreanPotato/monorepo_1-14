@@ -1,0 +1,41 @@
+name: Ansible and Docker Deployment
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install ansible
+
+      - name: Set up SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H 100.114.136.8 >> ~/.ssh/known_hosts
+
+      - name: Run Ansible playbook
+        run: |
+          cd devops/ansible
+          ansible-playbook -i inventory.ini playbook.yml
+
+      - name: Deploy with Docker script (fallback)
+        if: failure()
+        run: |
+          chmod +x devops/bash/deploy-container.sh
+          ./devops/bash/deploy-container.sh

@@ -1,26 +1,54 @@
 ---
-- name: Deploy web-ui service
+- name: Deploy web-ui service with Docker
   hosts: web_servers
   become: true  
   tasks:
-    - name: Copy systemd service file
+    - name: Install Docker dependencies
+      apt:
+        name: 
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - software-properties-common
+        state: present
+        update_cache: yes
+      
+    - name: Add Docker GPG key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+      
+    - name: Add Docker repository
+      apt_repository:
+        repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable
+        state: present
+      
+    - name: Install Docker
+      apt:
+        name: docker-ce
+        state: present
+        update_cache: yes
+      
+    - name: Copy Dockerfile
       copy:
-        src: ../systemd/web-ui.service
-        dest: /etc/systemd/system/web-ui.service
+        src: ../web-ui.Dockerfile
+        dest: /home/sergey/devops/web-ui.Dockerfile
         mode: '0644'
-      
-    - name: Reload systemd daemon
-      systemd:
-        daemon_reload: yes
-      
-    - name: Enable web-ui service
-      systemd:
-        name: web-ui
-        enabled: yes
         
-    - name: Start web-ui service
-      systemd:
-        name: web-ui
-        state: started
+    - name: Copy application files
+      copy:
+        src: ../../web-ui/src/
+        dest: /home/sergey/web-ui/src/
+        mode: '0644'
+        
+    - name: Build and run Docker container
+      shell: |
+        cd /home/sergey/web-ui/src
+        docker build -t web-ui:latest -f /home/sergey/devops/web-ui.Dockerfile .
+        docker stop web-app || true
+        docker rm web-app || true
+        docker run -d --name web-app -p 8080:8080 -e PORT=8080 web-ui:latest
+      args:
+        executable: /bin/bash
 
 #Task 8
